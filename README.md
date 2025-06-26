@@ -1,4 +1,4 @@
-# Sample Task Tracker
+# Task Tracker
 
 A simple and efficient Task Tracker application.
 

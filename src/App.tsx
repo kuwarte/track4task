@@ -1,4 +1,4 @@
-import { useState } from "react";
+import { useState, useEffect } from "react";
 import Task from "./components/Task";
 
 type Task = {
@@ -15,6 +15,12 @@ export default function App() {
 
   const doneTaskCount = tasks.filter((task) => task.done).length;
   const todoTaskCount = tasks.length - doneTaskCount;
+
+  useEffect(() => {
+    document.title = `track4task - ${todoTaskCount} ${
+      todoTaskCount <= 1 ? "task" : "tasks"
+    } left`;
+  }, [todoTaskCount]);
 
   const handleAddTask = (e: React.FormEvent<HTMLFormElement>) => {
     e.preventDefault();
@@ -69,9 +75,12 @@ export default function App() {
   return (
     <div className="h-screen px-2 flex items-center justify-center bg-zinc-100">
       <div className="w-250 h-150 p-8 rounded-lg shadow-lg bg-zinc-200 flex flex-col">
-        <h1 className="text-5xl font-bold mb-4 text-left text-zinc-700 text-shadow-lg">
-          taskTracker
+        <h1 className="text-5xl font-bold text-left text-zinc-700 text-shadow-lg">
+          track4task
         </h1>
+        <p className="text-xl font-mono mb-4 text-zinc-500 align-middle ml-2">
+          personalTrackerForTasks
+        </p>
         <form onSubmit={handleAddTask} className="h-30 flex justify-between">
           <div className="flex flex-col w-[90%] h-full gap-2 items-center">
             <input
@@ -110,11 +119,11 @@ export default function App() {
         <div className="flex items-center justify-between mb-4">
           {tasks.length > 1 ? (
             <h2 className="text-4xl font-bold mb-4 text-left text-zinc-700 text-shadow-lg">
-              tasksList
+              taskslist
             </h2>
           ) : (
             <h2 className="text-4xl font-bold mb-4 text-left text-zinc-700 text-shadow-lg">
-              taskList
+              tasklist
             </h2>
           )}
           <div className="relative w-[40%]">
@@ -138,7 +147,7 @@ export default function App() {
           </div>
         </div>
         <p className="italic text-zinc-500 mt-[-20px]">
-          Click the circle ○ to mark as done. Maximum of 10 tasks allowed.
+          Click "mark as done" if completed. A maximum of 10 tasks is allowed.
         </p>
         <ul className="bg-zinc-300 mt-4 p-4 h-55 max-h-55 rounded shadow-[inset_0_2px_8px_rgba(0,0,0,0.15)] overflow-y-scroll">
           {tasks.length === 0 ? (

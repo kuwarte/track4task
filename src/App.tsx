@@ -1,21 +1,37 @@
 import { useState } from "react";
+import Task from "./components/Task";
 
 type Task = {
-  text: string;
+  title: string;
+  description: string;
   done: boolean;
 };
 
 export default function App() {
   const [tasks, setTasks] = useState<Task[]>([]);
-  const [newTask, setNewTask] = useState("");
+  const [newTitle, setNewTitle] = useState<string>("");
+  const [newDescription, setNewDescription] = useState<string>("");
+  const [searchTask, setSearchTask] = useState<string>("");
 
-  const doneTaskCount: number = tasks.filter((task) => task.done).length;
-  const todoTaskCount: number = tasks.length - doneTaskCount;
+  const doneTaskCount = tasks.filter((task) => task.done).length;
+  const todoTaskCount = tasks.length - doneTaskCount;
 
-  const addTask: React.MouseEventHandler<HTMLButtonElement> = () => {
-    if (newTask.trim() === "") return;
-    setTasks([...tasks, { text: newTask, done: false }]);
-    setNewTask("");
+  const handleAddTask = (e: React.FormEvent<HTMLFormElement>) => {
+    e.preventDefault();
+    if (newTitle.trim() === "" || tasks.length >= 10) return;
+    setTasks([
+      ...tasks,
+      {
+        title: newTitle,
+        description:
+          newDescription.trim() === ""
+            ? "No description provided"
+            : newDescription,
+        done: false,
+      },
+    ]);
+    setNewTitle("");
+    setNewDescription("");
   };
 
   const removeTask: (index: number) => void = (index) => {
@@ -30,78 +46,105 @@ export default function App() {
     );
   };
 
+  const filteredTasks = tasks.filter((task) =>
+    (task.title + " " + task.description)
+      .toLowerCase()
+      .includes(searchTask.toLowerCase())
+  );
+
   return (
-    <div className="min-h-screen flex items-center justify-center bg-zinc-100">
-      <div className="w-full max-w-md p-8 rounded-lg shadow-lg bg-zinc-200">
-        <h1 className="text-2xl font-bold mb-4 text-left bg-gradient-to-r from-amber-950 to-amber-600 bg-clip-text text-transparent drop-shadow-lg">
+    <div className="h-screen px-2 flex items-center justify-center bg-zinc-100">
+      <div className="w-250 h-150 p-8 rounded-lg shadow-lg bg-zinc-200 flex flex-col">
+        <h1 className="text-5xl font-bold mb-4 text-left text-zinc-700 text-shadow-lg">
           taskTracker
         </h1>
-        <input
-          type="text"
-          value={newTask}
-          onChange={(e) => setNewTask(e.target.value)}
-          placeholder="Add a new task [ 25 characters max ]"
-          className="bg-zinc-100 p-2 rounded w-full mb-4 shadow-lg focus:outline-none focus:ring-1 focus:ring-zinc-500 transition-all duration-200"
-          maxLength={25}
-        />
-        <button
-          onClick={addTask}
-          disabled={tasks.length >= 3}
-          className="bg-zinc-600 text-white px-4 py-2 rounded w-full hover:bg-zinc-800 transition-all duration-200 cursor-pointer focus:bg-zinc-900 shadow-lg disabled:bg-zinc-900 disabled:cursor-not-allowed disabled:opacity-50"
-        >
-          Add Task
-        </button>
+        <form onSubmit={handleAddTask} className="h-30 flex justify-between">
+          <div className="flex flex-col w-[90%] h-full gap-2 items-center">
+            <input
+              type="text"
+              value={newTitle}
+              onChange={(e) => setNewTitle(e.target.value)}
+              placeholder={
+                tasks.length >= 10
+                  ? "Remove task first to add new..."
+                  : "Add task title [30 characters max]"
+              }
+              className="bg-zinc-100 p-2 rounded w-full shadow-lg focus:outline-none focus:ring-1 focus:ring-zinc-500 transition-all duration-200"
+              maxLength={30}
+              autoFocus
+            />
+            <input
+              disabled={newTitle.length < 1}
+              value={newDescription}
+              onChange={(e) => setNewDescription(e.target.value)}
+              placeholder="Add task description [120 characters max]"
+              className={`bg-zinc-100 p-2 rounded w-full shadow-lg focus:outline-none focus:ring-1 focus:ring-zinc-500 transition-all duration-200 ${
+                newTitle.length >= 1 ? "opacity-100" : "opacity-40"
+              }`}
+              maxLength={120}
+            />
+          </div>
+          <button
+            type="submit"
+            disabled={tasks.length >= 10}
+            className="flex justify-center items-center w-[9%] h-full bg-zinc-600 text-white text-2xl rounded hover:bg-zinc-700 transition-all duration-200 cursor-pointer focus:bg-zinc-900 shadow-lg disabled:bg-zinc-900 disabled:cursor-not-allowed disabled:opacity-50"
+          >
+            +
+          </button>
+        </form>
         <hr className="my-7 border-1 border-dashed" />
-        {tasks.length > 1 ? (
-          <h2 className="text-xl font-bold mb-4 text-left bg-gradient-to-r from-amber-950 to-amber-600 bg-clip-text text-transparent drop-shadow-lg">
-            tasksList
-          </h2>
-        ) : (
-          <h2 className="text-xl font-bold mb-4 text-left bg-gradient-to-r from-amber-950 to-amber-600 bg-clip-text text-transparent drop-shadow-lg">
-            taskList
-          </h2>
-        )}
-        <p className="italic text-zinc-500">
-          Tap the ellipsis if done (...), 3 tasks is the maximum
+        <div className="flex items-center justify-between mb-4">
+          {tasks.length > 1 ? (
+            <h2 className="text-4xl font-bold mb-4 text-left text-zinc-700 text-shadow-lg">
+              tasksList
+            </h2>
+          ) : (
+            <h2 className="text-4xl font-bold mb-4 text-left text-zinc-700 text-shadow-lg">
+              taskList
+            </h2>
+          )}
+          <div className="relative w-[40%]">
+            <input
+              type="text"
+              value={searchTask}
+              onChange={(e) => setSearchTask(e.target.value)}
+              placeholder={
+                tasks.length <= 1
+                  ? "There is no task to filter..."
+                  : "Filter tasks..."
+              }
+              disabled={tasks.length === 0}
+              className={`bg-zinc-100 p-2 pr-10 rounded w-full shadow-lg focus:outline-none focus:ring-1 focus:ring-zinc-500 transition-all duration-200 ${
+                tasks.length <= 1 ? "opacity-40" : "opacity-100"
+              }`}
+            />
+            <span className="absolute right-3 top-1/2 -translate-y-1/2 text-zinc-400 pointer-events-none select-none">
+              🔍︎
+            </span>
+          </div>
+        </div>
+        <p className="italic text-zinc-500 mt-[-20px]">
+          Click the circle ○ to mark as done. Maximum of 10 tasks allowed.
         </p>
-        <ul className="mt-4">
+        <ul className="bg-zinc-300 mt-4 p-4 h-55 max-h-55 rounded shadow-[inset_0_2px_8px_rgba(0,0,0,0.15)] overflow-y-scroll">
           {tasks.length === 0 ? (
             <li className="text-center text-zinc-500">No tasks yet</li>
           ) : (
-            tasks.map((task, index) => (
-              <li
-                key={index}
-                className="flex justify-between items-center mb-2 bg-zinc-100 p-3 rounded shadow-lg"
-              >
-                <span className={task.done ? "line-through text-zinc-400" : ""}>
-                  {task.text}
-                </span>
-                <div className="flex items-center gap-3">
-                  <button
-                    onClick={() => toggleDone(index)}
-                    className={`px-2 py-1 rounded h-8 w-8 drop-shadow-lg cursor-pointer ${
-                      task.done
-                        ? "bg-emerald-500 text-white"
-                        : "bg-zinc-600 text-white"
-                    }`}
-                  >
-                    {task.done ? "✓" : "…"}
-                  </button>
-                  <button
-                    onClick={() => removeTask(index)}
-                    className="h-8 w-8 bg-red-600 text-white px-2 py-1 rounded hover:bg-red-800 transition-all duration-200  cursor-pointer drop-shadow-lg"
-                  >
-                    ✗
-                  </button>
-                </div>
-              </li>
-            ))
+            <Task
+              tasks={filteredTasks}
+              toggleDone={toggleDone}
+              removeTask={removeTask}
+            />
           )}
         </ul>
-      </div>
-      <div className="flex flex-col absolute top-3 left-3">
-        <span className="italic">Done Tasks: {doneTaskCount}</span>
-        <span className="italic">Task To Do: {todoTaskCount}</span>
+        <div className="self-end gap-2 mt-4 flex items-center justify-end">
+          <span className="italic text-zinc-500">
+            Done Tasks: {doneTaskCount}
+          </span>
+          <span className="italic text-zinc-500">
+            Task To Do: {todoTaskCount}
+          </span>
+        </div>
       </div>
     </div>
   );

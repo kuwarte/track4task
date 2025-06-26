@@ -34,6 +34,20 @@ export default function App() {
     setNewDescription("");
   };
 
+  const handleTitleWordInput = (e: React.ChangeEvent<HTMLInputElement>) => {
+    const value = e.target.value;
+    if (value.split(/\s+/).some((word) => word.length > 15)) return;
+    setNewTitle(value);
+  };
+
+  const handleDescriptionWordInput = (
+    e: React.ChangeEvent<HTMLInputElement>
+  ) => {
+    const value = e.target.value;
+    if (value.split(/\s+/).some((word) => word.length > 15)) return;
+    setNewDescription(value);
+  };
+
   const removeTask: (index: number) => void = (index) => {
     setTasks(tasks.filter((_, i) => i !== index));
   };
@@ -63,7 +77,7 @@ export default function App() {
             <input
               type="text"
               value={newTitle}
-              onChange={(e) => setNewTitle(e.target.value)}
+              onChange={handleTitleWordInput}
               placeholder={
                 tasks.length >= 10
                   ? "Remove task first to add new..."
@@ -76,7 +90,7 @@ export default function App() {
             <input
               disabled={newTitle.length < 1}
               value={newDescription}
-              onChange={(e) => setNewDescription(e.target.value)}
+              onChange={handleDescriptionWordInput}
               placeholder="Add task description [120 characters max]"
               className={`bg-zinc-100 p-2 rounded w-full shadow-lg focus:outline-none focus:ring-1 focus:ring-zinc-500 transition-all duration-200 ${
                 newTitle.length >= 1 ? "opacity-100" : "opacity-40"
@@ -113,7 +127,7 @@ export default function App() {
                   ? "There is no task to filter..."
                   : "Filter tasks..."
               }
-              disabled={tasks.length === 0}
+              disabled={tasks.length <= 1}
               className={`bg-zinc-100 p-2 pr-10 rounded w-full shadow-lg focus:outline-none focus:ring-1 focus:ring-zinc-500 transition-all duration-200 ${
                 tasks.length <= 1 ? "opacity-40" : "opacity-100"
               }`}

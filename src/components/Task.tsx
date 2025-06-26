@@ -14,7 +14,7 @@ export default function Task({ tasks, toggleDone, removeTask }: TaskProps) {
   return tasks.map((task, index) => (
     <li
       key={index}
-      className="flex flex-col gap-2 mb-2 bg-zinc-100 p-5 rounded shadow-lg"
+      className="flex flex-col gap-2 mb-2 bg-zinc-100 p-3 sm:p-5 rounded shadow-lg"
     >
       <div className="flex justify-between items-center flex-wrap">
         <span
@@ -41,7 +41,7 @@ export default function Task({ tasks, toggleDone, removeTask }: TaskProps) {
           </button>
         </div>
       </div>
-      <div className="flex items-center min-w-0">
+      <div className="w-full">
         <span
           className={`break-words w-full min-w-0 text-sm sm:text-base ml-2 italic ${
             task.done ? "text-zinc-300 text-shadow-zinc-900" : ""

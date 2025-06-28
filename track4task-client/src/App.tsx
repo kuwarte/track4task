@@ -1,10 +1,14 @@
 import { useState, useEffect } from "react";
+import axios from "axios";
 import Task from "./components/Task";
+import SearchIcon from "./components/icons/SearchIcon";
 
 type Task = {
   title: string;
   description: string;
   done: boolean;
+  id?: string;
+  _id?: string;
 };
 
 export default function App() {
@@ -17,27 +21,85 @@ export default function App() {
   const todoTaskCount = tasks.length - doneTaskCount;
 
   useEffect(() => {
+    fetchTasks();
+  }, []);
+
+  useEffect(() => {
     document.title = `track4task - ${todoTaskCount} ${
       todoTaskCount <= 1 ? "task" : "tasks"
     } left`;
   }, [todoTaskCount]);
 
-  const handleAddTask = (e: React.FormEvent<HTMLFormElement>) => {
+  const fetchTasks = async () => {
+    try {
+      const res = await axios.get("http://localhost:5000/api/tasks");
+      setTasks(res.data);
+    } catch (err) {
+      console.error(err);
+    }
+  };
+
+  const handleAddTask = async (e: React.FormEvent<HTMLFormElement>) => {
     e.preventDefault();
     if (newTitle.trim() === "" || tasks.length >= 10) return;
-    setTasks([
-      ...tasks,
-      {
-        title: newTitle,
-        description:
-          newDescription.trim() === ""
-            ? "No description provided"
-            : newDescription,
-        done: false,
-      },
-    ]);
-    setNewTitle("");
-    setNewDescription("");
+    const newTask = {
+      title: newTitle,
+      description:
+        newDescription.trim() === ""
+          ? "No description provided"
+          : newDescription,
+      done: false,
+    };
+    try {
+      await axios.post("http://localhost:5000/api/tasks", newTask);
+      await fetchTasks();
+      setNewTitle("");
+      setNewDescription("");
+    } catch (err) {
+      console.error(err);
+    }
+  };
+
+  const removeTask = async (index: number) => {
+    const taskId = tasks[index]._id || tasks[index].id;
+    try {
+      await axios.delete(`http://localhost:5000/api/tasks/${taskId}`);
+      await fetchTasks();
+    } catch (err) {
+      console.error(err);
+    }
+  };
+
+  const toggleDone = async (index: number) => {
+    const task = tasks[index];
+    const taskId = task._id || task.id;
+    try {
+      await axios.put(`http://localhost:5000/api/tasks/${taskId}`, {
+        ...task,
+        done: !task.done,
+      });
+      await fetchTasks();
+    } catch (err) {
+      console.error(err);
+    }
+  };
+
+  const editTask = async (
+    index: number,
+    field: "title" | "description",
+    newValue: string
+  ) => {
+    const task = tasks[index];
+    const taskId = task._id || task.id;
+    try {
+      await axios.put(`http://localhost:5000/api/tasks/${taskId}`, {
+        ...task,
+        [field]: newValue,
+      });
+      await fetchTasks();
+    } catch (err) {
+      console.error(err);
+    }
   };
 
   const handleTitleWordInput = (e: React.ChangeEvent<HTMLInputElement>) => {
@@ -52,18 +114,6 @@ export default function App() {
     const value = e.target.value;
     if (value.split(/\s+/).some((word) => word.length > 15)) return;
     setNewDescription(value);
-  };
-
-  const removeTask: (index: number) => void = (index) => {
-    setTasks(tasks.filter((_, i) => i !== index));
-  };
-
-  const toggleDone = (index: number) => {
-    setTasks(
-      tasks.map((task, i) =>
-        i === index ? { ...task, done: !task.done } : task
-      )
-    );
   };
 
   const filteredTasks = tasks.filter((task) =>
@@ -142,12 +192,13 @@ export default function App() {
               }`}
             />
             <span className="absolute right-3 top-1/2 -translate-y-1/2 text-zinc-400 pointer-events-none select-none">
-              🔍︎
+              <SearchIcon />
             </span>
           </div>
         </div>
         <p className="italic text-zinc-500 mt-[-20px]">
           Click "mark as done" if completed. A maximum of 10 tasks is allowed.
+          Double click the task to edit.
         </p>
         <ul className="bg-zinc-300 mt-4 p-4 h-55 max-h-55 rounded shadow-[inset_0_2px_8px_rgba(0,0,0,0.15)] overflow-y-scroll">
           {tasks.length === 0 ? (
@@ -157,6 +208,7 @@ export default function App() {
               tasks={filteredTasks}
               toggleDone={toggleDone}
               removeTask={removeTask}
+              editTask={editTask}
             />
           )}
         </ul>

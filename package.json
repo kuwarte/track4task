@@ -1,0 +1,23 @@
+{
+  "name": "react-todo-list",
+  "version": "1.0.0",
+  "main": "index.js",
+  "scripts": {
+    "dev": "concurrently \"npm run dev --prefix track4task-server\" \"npm run dev --prefix track4task-client\""
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/hekigyokuu/sample-task-tracker.git"
+  },
+  "keywords": [],
+  "author": "",
+  "license": "ISC",
+  "bugs": {
+    "url": "https://github.com/hekigyokuu/sample-task-tracker/issues"
+  },
+  "homepage": "https://github.com/hekigyokuu/sample-task-tracker#readme",
+  "description": "",
+  "devDependencies": {
+    "concurrently": "^9.2.0"
+  }
+}

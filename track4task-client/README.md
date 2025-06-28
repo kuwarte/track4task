@@ -24,8 +24,30 @@ A simple and efficient Task Tracker application.
    ```bash
    npm install
    ```
+   Install the dependency for the root folder.
 
-3. **Run the app:**
+   ```bash
+   cd track4task-client
+   npm install
+   ```
+   Install the dependencies for the React app.
+
+   ```bash
+   cd track4task-server
+   npm install
+   ```
+   Install the dependencies for the Express.js and Node.js
+
+3. **Run the MongoDB database:**
+
+   ```bash
+   mongod
+   ```
+
+   This will start the development server.  
+   Open your browser and go to [http://localhost:5173](http://localhost:5173) to view the app.
+
+4. **Run the app (at the root folder: track4task/):**
 
    ```bash
    npm run dev
@@ -33,10 +55,13 @@ A simple and efficient Task Tracker application.
 
    This will start the development server.  
    Open your browser and go to [http://localhost:5173](http://localhost:5173) to view the app.
-
+   
 ## Technologies Used
 
 - Vite
 - React
 - TypeScript
 - Tailwind CSS
+- Express
+- Node
+- MongoDB

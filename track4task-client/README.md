@@ -1,12 +1,12 @@
 # track4task
 
-A simple and efficient Task Tracker application.
+A simple and efficient Task Tracker application built with the MERN stack + Vite + Tailwind CSS.
 
 ## Features
 
 - Add, edit, and delete tasks
-- Mark tasks as completed with counters
-- Filter tasks by content
+- Mark tasks as completed with real-time counters
+- Filter tasks by title or description
 - **(Upcoming features will be listed here)**
 
 ## Getting Started
@@ -17,41 +17,46 @@ A simple and efficient Task Tracker application.
    git clone https://github.com/hekigyokuu/sample-task-tracker.git
    ```
 
-   Or download the ZIP file from GitHub and extract it.
+   Or [Download ZIP](https://github.com/hekigyokuu/track4task/archive/refs/heads/main.zip) and extract it.
 
-2. **Install dependencies:**
+2. **Install Dependencies:**
 
    Install the dependency for the root folder.
    ```bash
    npm install
    ```
 
-   Install the dependencies for the React app.
+   Then for the React frontend (client):
    ```bash
    cd track4task-client
    npm install
    ```
 
-   Install the dependencies for the Express and Node
+   Then for the Express backend (server):
    ```bash
-   cd track4task-server
+   cd ../track4task-server
    npm install
    ```
 
 3. **Run the MongoDB database:**
-
+   Make sure you have MongoDB installed and running locally.
    ```bash
    mongod
    ```
 
-4. **Run the app (at the root folder: track4task/):**
+4. **Run the full app (Root folder):**
 
    ```bash
    npm run dev
    ```
 
-   This will start the development server.  
-   Open your browser and go to [http://localhost:5173](http://localhost:5173) to view the app.
+   Start the Express server (on port 5000)
+   Start the Vite React client (on port 5173)
+   
+6. **Open in Browser:**
+   Go to:
+   http://localhost:5173
+
    
 ## Technologies Used
 

@@ -14,10 +14,10 @@ A simple and efficient Task Tracker application built with the MERN stack + Vite
 1. **Clone the repository or download the ZIP:**
 
    ```bash
-   git clone https://github.com/hekigyokuu/sample-task-tracker.git
+   git clone https://github.com/jaspercuarte/track4task.git
    ```
 
-   Or [Download ZIP](https://github.com/hekigyokuu/track4task/archive/refs/heads/main.zip) and extract it.
+   Or [Download ZIP](https://github.com/jaspercuarte/track4task/archive/refs/heads/main.zip) and extract it.
 
 2. **Install Dependencies:**
 
@@ -26,13 +26,13 @@ A simple and efficient Task Tracker application built with the MERN stack + Vite
    npm install
    ```
 
-   Then for the React frontend (client):
+   Then for the frontend (client):
    ```bash
    cd track4task-client
    npm install
    ```
 
-   Then for the Express backend (server):
+   Then for the backend (server):
    ```bash
    cd ../track4task-server
    npm install

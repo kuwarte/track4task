@@ -1,6 +1,7 @@
 import { useState, useEffect } from "react";
 import axios from "axios";
 import Task from "./components/Task";
+import MusicPlayer from "./components/MusicPlayer";
 import SearchIcon from "./components/icons/SearchIcon";
 
 type Task = {
@@ -124,6 +125,7 @@ export default function App() {
 
   return (
     <div className="h-screen px-2 flex items-center justify-center bg-zinc-100">
+      <MusicPlayer />
       <div className="w-250 h-150 p-8 rounded-lg shadow-lg bg-zinc-200 flex flex-col">
         <h1 className="text-5xl font-bold text-left text-zinc-700 text-shadow-lg">
           track4task

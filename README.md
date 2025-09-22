@@ -14,10 +14,10 @@ A simple and efficient Task Tracker application built with the MERN stack + Vite
 1. **Clone the repository or download the ZIP:**
 
    ```bash
-   git clone https://github.com/jaspercuarte/track4task.git
+   git clone https://github.com/kuwarte/track4task.git
    ```
 
-   Or [Download ZIP](https://github.com/jaspercuarte/track4task/archive/refs/heads/main.zip) and extract it.
+   Or [Download ZIP](https://github.com/kuwarte/track4task/archive/refs/heads/main.zip) and extract it.
 
 2. **Install Dependencies:**
 
